@@ -1,0 +1,14 @@
+{
+  "name": "price-agreed",
+  "owner": {
+    "name": "ELK CONSULTING LTD",
+    "email": "support@priceagreed.com"
+  },
+  "plugins": [
+    {
+      "name": "price-agreed",
+      "source": "grok-bot",
+      "description": "Find UK tradespeople, send them one job, compare their quotes and agree a price. No account needed."
+    }
+  ]
+}

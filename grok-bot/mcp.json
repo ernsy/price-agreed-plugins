@@ -1,0 +1,7 @@
+{
+  "mcpServers": {
+    "price-agreed": {
+      "url": "https://mcp.priceagreed.com/mcp/grok"
+    }
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "name": "price-agreed",
+  "version": "0.1.0",
+  "description": "Find UK tradespeople, send them one job, compare their quotes and agree a price. No account needed.",
+  "author": {
+    "name": "ELK CONSULTING LTD",
+    "email": "support@priceagreed.com"
+  },
+  "homepage": "https://priceagreed.com/grok",
+  "keywords": [
+    "tradesperson",
+    "plumber",
+    "electrician",
+    "builder",
+    "quotes",
+    "home improvement",
+    "uk"
+  ],
+  "logo": "assets/logo.svg",
+  "skills": "./skills/",
+  "mcpServers": "./mcp.json"
+}
