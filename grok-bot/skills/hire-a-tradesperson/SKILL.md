@@ -12,11 +12,15 @@ in the UK and needs no account.
 ## Steps
 
 1. **Find tradespeople.** Call `search_tradespeople` with the trade and the
-   user's town or postcode. Show a short list: business name, town, services.
+   user's town or postcode. If the user named the type of job (e.g. Boiler
+   repair), pass it as `service` to keep only businesses that offer it. Show a
+   short list: business name, town, services.
    Keep `claimed_only` on; unclaimed businesses cannot receive jobs yet.
 2. **Collect the job.** You need the job description in the user's words, the
-   postcode where the work is, and the user's name, email and phone. The email
-   must be the user's own: Price Agreed emails a link there and only sends the
+   postcode where the work is, and the user's email. Name and phone are
+   optional: offer to include them, but send without them if the user prefers.
+   Pass the type of job as `service` if you know it. The email must be the
+   user's own: Price Agreed emails a link there and only sends the
    job to tradespeople once the user confirms it from that email.
 3. **Confirm, then send.** Read back the job, postcode, contact details and the
    chosen businesses. Only after the user says yes, call `send_job` with

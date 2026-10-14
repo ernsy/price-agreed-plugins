@@ -30,7 +30,7 @@ Price Agreed sends them. Quotes are also emailed to the user.
 
 ## Privacy
 
-Personal data (the user's name, email, phone, postcode and job description) is
-sent only when the user asks to send a job. See
+Personal data (the user's email, postcode and job description, plus name and
+phone if given) is sent only when the user asks to send a job. See
 https://priceagreed.com/privacy. Operator: ELK CONSULTING LTD, company number
 17326346, England and Wales. Support: support@priceagreed.com.
