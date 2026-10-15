@@ -12,9 +12,11 @@ in the UK and needs no account.
 ## Steps
 
 1. **Find tradespeople.** Call `search_tradespeople` with the trade and the
-   user's town or postcode. If the user named the type of job (e.g. Boiler
-   repair), pass it as `service` to keep only businesses that offer it. Show a
-   short list: business name, town, services.
+   postcode where the work is (or their town). If the user named the type of
+   job (e.g. Boiler repair), pass it as `service`: businesses that list it come
+   first, then others in the trade. With a postcode, results are businesses
+   that travel that far, nearest first. Show a short list: business name, town,
+   how far away, and whether they list that type of job.
    Keep `claimed_only` on; unclaimed businesses cannot receive jobs yet.
 2. **Collect the job.** You need the job description in the user's words, the
    postcode where the work is, and the user's email. Name and phone are
