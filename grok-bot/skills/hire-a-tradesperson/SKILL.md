@@ -21,21 +21,25 @@ in the UK and needs no account.
    Ratings come only from customers whose quote was accepted through Price
    Agreed. `get_tradesperson` shows a business's recent reviews.
    Keep `claimed_only` on; unclaimed businesses cannot receive jobs yet.
-2. **Collect the job.** You need the job description in the user's words, the
-   postcode where the work is, and the user's email. Name and phone are
+2. **Collect the job.** You need a short title for the job (3 to 60
+   characters, e.g. "Fix leaking kitchen tap", no links, email addresses or phone numbers),
+   the job description in the user's words, the postcode where the work is,
+   and the user's email. Ask the user for the title, or suggest one and let
+   them change it; never pick one silently. Name and phone are
    optional: offer to include them, but send without them if the user prefers.
    Pass the type of job as `service` if you know it. The email must be the
    user's own: Price Agreed emails a link there and only sends the
    job to tradespeople once the user confirms it from that email.
-3. **Confirm, then send.** Read back the job, postcode, contact details and the
-   chosen businesses. Only after the user says yes, call `send_job` with
+3. **Confirm, then send.** Read back the title, job, postcode, contact details
+   and the chosen businesses. Only after the user says yes, call `send_job` with
    `user_confirmed: true` and a new `idempotency_key`. Reuse the same key if you
    retry, so tradespeople are not emailed twice.
 4. **Tell the user what happens next.** They need to open the Price Agreed email
    and confirm the job. Quotes usually take hours to days, and each new quote
    is also emailed to them.
 5. **Keep the job id and access token** from `send_job` for this conversation or
-   task. Treat the token like a password: do not show it unless asked.
+   task. Treat the token like a password: do not show it unless asked. When
+   talking about the job, call it by its title.
 6. **Check quotes** with `get_quotes`. Quotes come cheapest first, with each
    business's rating and a `next_action` hint. Help the user weigh price
    against rating; never choose for them. When working in the background,
