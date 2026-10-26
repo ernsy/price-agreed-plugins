@@ -1,18 +1,22 @@
 ---
 name: hire-a-tradesperson
-description: Use when the user wants a plumber, electrician, builder, roofer or any other tradesperson in the UK, wants quotes for a home job, or asks about quotes on a job they sent through Price Agreed.
+description: Use when the user wants a plumber, electrician, builder, roofer or any other tradesperson, anywhere in the world, wants quotes for a home job, or asks about quotes on a job they sent through Price Agreed.
 ---
 
-# Hire a UK tradesperson with Price Agreed
+# Hire a tradesperson with Price Agreed
 
-Price Agreed sends one job to up to 10 UK tradespeople. They reply with written
-quotes, the user picks one, and the price is agreed in writing. It works only
-in the UK and needs no account.
+Price Agreed sends one job to up to 10 tradespeople. They reply with written
+quotes, the user picks one, and the price is agreed in writing. It works in
+every country and needs no account.
 
 ## Steps
 
-1. **Find tradespeople.** Call `search_tradespeople` with the trade and the
-   postcode where the work is (or their town). If the user named the type of
+1. **Find tradespeople.** Work out which country the job is in. If it isn't
+   obvious from the conversation, ask; don't assume the UK. Call
+   `search_tradespeople` with the trade, the `country` as a two-letter code
+   in capitals (GB, IE, FR, US, AU and so on; GB if left out) and the
+   `postcode` where the work is: a UK postcode for GB, elsewhere a postal
+   code or town (e.g. "75001" or "Lyon"). If the user named the type of
    job (e.g. Boiler repair), pass it as `service`: businesses that list it come
    first, then others in the trade. With a postcode, results are businesses
    that travel that far, nearest first, and the better rated first within the
@@ -23,14 +27,15 @@ in the UK and needs no account.
    Keep `claimed_only` on; unclaimed businesses cannot receive jobs yet.
 2. **Collect the job.** You need a short title for the job (3 to 60
    characters, e.g. "Fix leaking kitchen tap", no links, email addresses or phone numbers),
-   the job description in the user's words, the postcode where the work is,
-   and the user's email. Ask the user for the title, or suggest one and let
+   the job description in the user's words, the country and postcode (or,
+   outside the UK, postal code or town) where the work is, and the user's
+   email. Pass the same `country` to `send_job` as you searched with. Ask the user for the title, or suggest one and let
    them change it; never pick one silently. Name and phone are
    optional: offer to include them, but send without them if the user prefers.
    Pass the type of job as `service` if you know it. The email must be the
    user's own: Price Agreed emails a link there and only sends the
    job to tradespeople once the user confirms it from that email.
-3. **Confirm, then send.** Read back the title, job, postcode, contact details
+3. **Confirm, then send.** Read back the title, job, country and postcode, contact details
    and the chosen businesses. Only after the user says yes, call `send_job` with
    `user_confirmed: true` and a new `idempotency_key`. Reuse the same key if you
    retry, so tradespeople are not emailed twice.
@@ -41,12 +46,14 @@ in the UK and needs no account.
    task. Treat the token like a password: do not show it unless asked. When
    talking about the job, call it by its title.
 6. **Check quotes** with `get_quotes`. Quotes come cheapest first, with each
-   business's rating and a `next_action` hint. Help the user weigh price
+   business's rating and a `next_action` hint. Each job has its own currency:
+   every quote has a `currency` and a `price` such as "95.50 EUR". Always give
+   prices with their currency; never assume pounds. Help the user weigh price
    against rating; never choose for them. When working in the background,
    check now and then; there is no need to check more than every few hours.
 7. **Accept only on the user's word.** When the user picks a quote, repeat the
-   business and the exact amount. After they confirm, call `accept_quote` with
-   that `expected_amount` and `user_confirmed: true`. If it fails with
+   business and the exact amount with its currency. After they confirm, call
+   `accept_quote` with that amount, without the currency, as `expected_amount` and `user_confirmed: true`. If it fails with
    `price_changed`, fetch the quotes again and ask the user.
 8. After acceptance, use `message_tradesperson` and `get_messages` to arrange a
    time. Use `forget_job` if the user wants you to stop having access.
