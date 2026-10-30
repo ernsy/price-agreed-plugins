@@ -1,0 +1,108 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "price-agreed",
+  "version": "1.0.1",
+  "description": "Find tradespeople in any country, send them one job, compare their quotes and agree a price. No account needed.",
+  "author": {
+    "name": "ELK CONSULTING LTD",
+    "email": "support@priceagreed.com",
+    "url": "https://priceagreed.com"
+  },
+  "homepage": "https://priceagreed.com/chatgpt",
+  "keywords": [
+    "tradesperson",
+    "plumber",
+    "electrician",
+    "builder",
+    "roofer",
+    "quotes",
+    "home improvement",
+    "worldwide"
+  ],
+  "extensions": {
+    "com.openai": {
+      "interface": {
+        "displayName": "Price Agreed",
+        "shortDescription": "Quotes from tradespeople",
+        "longDescription": "Price Agreed helps people anywhere in the world hire a tradesperson without ringing round. Tell ChatGPT what needs doing and where (the country, and a postcode, postal code or town), and it finds local plumbers, electricians, builders, roofers and other trades on Price Agreed. Pick up to 10 and it sends them your job in one go.\n\nTradespeople reply with a written quote. ChatGPT can fetch the quotes, cheapest first, and show you each tradesperson's note. When you choose one, it accepts that quote for you and the agreed price is recorded, so there is nothing to argue about later.\n\nYour contact details stay private while you compare. Tradespeople see the job and where it is (postcode, postal code or town), but only the one whose quote you accept gets your contact details (your email, plus your name and phone if you give them). New quotes are also emailed to you, so you can pick up where you left off on the website.\n\nNo account is needed. ChatGPT always asks you before it sends a job or accepts a price, and a new job only reaches tradespeople after you confirm it from an email Price Agreed sends you. Price Agreed takes no payments: you pay the tradesperson directly.",
+        "developerName": "ELK CONSULTING LTD",
+        "category": "Productivity",
+        "capabilities": [
+          "Find tradespeople",
+          "Send a job",
+          "Compare quotes",
+          "Accept a quote",
+          "Message tradespeople"
+        ],
+        "websiteURL": "https://priceagreed.com",
+        "supportURL": "https://priceagreed.com/support",
+        "privacyPolicyURL": "https://priceagreed.com/privacy",
+        "termsOfServiceURL": "https://priceagreed.com/terms",
+        "defaultPrompt": [
+          "Find me a plumber near Leeds LS6 who can fix a leaking kitchen tap.",
+          "I need an electrician in Lyon, France, to replace a fuse box.",
+          "Have any of the tradespeople quoted for my job yet?"
+        ],
+        "brandColor": "#0f3d32",
+        "composerIcon": "./assets/logo.png",
+        "logo": "./assets/logo.png"
+      },
+      "review": {
+        "test_cases": {
+          "positive": [
+            {
+              "description": "Search the directory by trade and postcode. ZZ99 9ZZ is a made-up postcode covered only by our reviewer test profile, so no real business is involved.",
+              "prompt": "Find a plumber for postcode ZZ99 9ZZ.",
+              "tools_triggered": "search_tradespeople",
+              "expected_behavior": "Returns Price Agreed Test Plumbing (test account, not a real business), which can receive jobs."
+            },
+            {
+              "description": "Send a job after confirming the details with the user. Jobs sent only to the test profile skip the email confirmation, are quoted automatically and email nobody, so any email address works.",
+              "prompt": "Send this job to Price Agreed Test Plumbing: the kitchen tap is dripping and needs a new washer. Postcode ZZ99 9ZZ. My email is reviewer@example.com.",
+              "tools_triggered": "send_job",
+              "expected_behavior": "Asks for or suggests a short job title, reads back the title, job, country, postcode, email and chosen business, and only calls send_job after the user says yes. Returns a job id, the title, a reference starting with PA and test_job: true."
+            },
+            {
+              "description": "Check the quotes on the job just sent.",
+              "prompt": "Any quotes yet?",
+              "tools_triggered": "get_quotes",
+              "expected_behavior": "Shows one quote of 95.00 GBP (£95) from Price Agreed Test Plumbing, with its note presented as text written by the tradesperson."
+            },
+            {
+              "description": "Accept a quote only after confirming the exact price.",
+              "prompt": "Accept that quote.",
+              "tools_triggered": "accept_quote",
+              "expected_behavior": "Repeats the business and the £95 price and asks for confirmation, then calls accept_quote. The job status becomes confirmed."
+            },
+            {
+              "description": "Message the chosen tradesperson and read the conversation.",
+              "prompt": "Message the plumber: can you come on Saturday morning? Then show me the messages.",
+              "tools_triggered": "message_tradesperson, get_messages",
+              "expected_behavior": "Confirms the message text, sends it with message_tradesperson, then get_messages shows the message in the conversation with Price Agreed Test Plumbing."
+            }
+          ],
+          "negative": [
+            {
+              "description": "No location given: the assistant must ask where the work is (country and postcode, postal code or town) instead of guessing. No job is sent.",
+              "prompt": "Find me a plumber."
+            },
+            {
+              "description": "No contact email given: the assistant must ask for the user's email (and offer to add name and phone) instead of calling send_job.",
+              "prompt": "Send my job to the plumber you found."
+            },
+            {
+              "description": "Payments are not supported: the assistant should say the user pays the tradesperson directly. No tool is called.",
+              "prompt": "Pay the plumber £95."
+            }
+          ]
+        },
+        "commerce": false,
+        "commerce_description": "Price Agreed takes no payments. Accepting a quote records an agreed price; the customer pays the tradesperson directly."
+      },
+      "publication": {
+        "countries": [],
+        "release_notes": "First release: search tradespeople in any country, send one job to up to 10, compare quotes, accept one and message the tradesperson."
+      }
+    }
+  }
+}
